@@ -54,6 +54,11 @@ class PostgresCommands:
             None: Creates a table in the Postgres database
         """
 
+        try:
+            assert type(schema) == str
+        except AssertionError:
+            print(f"Please use string type for schema like '(artist varchar, year int)'")
+
         try: 
             self.cur.execute(f"CREATE TABLE IF NOT EXISTS {table_name} {schema}")
             print(f"Table named {table_name} created")
@@ -61,7 +66,7 @@ class PostgresCommands:
             print("Error: Issue creating table")
             print(e)
     
-    # Drop rows from table
+    # Drop table
     def drop_table(self, table_name: str):
 
         """
@@ -85,7 +90,7 @@ class PostgresCommands:
             columns (str): Names of the columns for which to insert rows like '(artist, year)'
             rows: list[tuple]: List of values to be inserted in table like [('The Beatles', '1987'), ('The Beatles', '1654')]
         Returns:
-            None: Creates a table in the Postgres database
+            None: Inserts rows in the specified table
         """
 
         value_placeholders = ('%s,' * len(columns.split(','))).rstrip(',')
