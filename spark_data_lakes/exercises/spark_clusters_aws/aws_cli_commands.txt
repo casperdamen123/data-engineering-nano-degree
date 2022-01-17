@@ -1,0 +1,51 @@
+# Create profile, when not selecting a name the default profile will be created
+aws configure --profile <your profile name>
+
+# Create environment variables for configuration and credentials file (on windows)
+setx AWS_CONFIG_FILE "C:\Users\CasperDamen\.aws\config
+setx AWS_SHARED_CREDENTIALS_FILE "C:\Users\CasperDamen\.aws\credentials"
+
+# Add configuration to profile (for example adding a role)
+aws configure set role_arn arn:aws:iam::110635350229:role/admin --profile <profile-name>
+
+# List profiles and configurations
+aws configure list
+
+# List users linked to profile
+aws iam list-users 
+
+# Get s3 files to local data folder
+aws s3 sync s3://976471595062-etl-farm-stage/raw_data data
+
+# Copy public s3 files to local bucket
+aws s3 sync s3://udacity-dend/song_data s3://udacity-data-nano-degree-de/song_data
+
+
+####################### SETUP EMR ################################
+
+# Create default roles in iam
+aws emr create-default-roles --profile <profile-name>
+
+# Create default VPC account
+aws ec2 create-default-vpc --profile <profile-name>
+
+# Launch EMR cluster
+aws emr create-cluster --name udacity-cluster --service-role admin \
+--release-label emr-5.28.0 --instance-count 3 --applications Name=Spark \
+--ec2-attributes KeyName=<key_name>,SubnetId=subnet-0decaee906f0c0154 
+--instance-type m5.xlarge --profile admin
+
+# Describe cluster
+aws emr describe-cluster --cluster-id <cluster-id>
+
+# Connect your local shell to (master) node
+ssh -i "udacity-spark.pem" hadoop@ec2-34-228-73-250.compute-1.amazonaws.com
+
+# Enable dynamic port forwarding 
+ssh -i udacity-spark.pem -N -D 8157 hadoop@ec2-34-228-73-250.compute-1.amazonaws.com
+
+# Copy file to master node
+scp -i <key_file_name> <file_name> hadoop@ec2-34-228-73-250.compute-1.amazonaws.com:/home/hadoop/
+
+# Upload a file to S3 bucket
+aws s3 cp <your current file location>/<filename> s3://<bucket_name>

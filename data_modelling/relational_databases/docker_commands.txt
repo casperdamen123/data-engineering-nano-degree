@@ -1,0 +1,14 @@
+# Setup container names nano_de_degree_postgres, set postgres_password as environment variable, expose/publish specific port
+docker run -d --name nano_de_degree_postgres -e POSTGRES_PASSWORD=postgres -e PGDATA=/var/lib/postgres/data/udacity -p 5432:5432 postgres 
+
+# Connect in shell to container named postgres with user role postgres
+docker exec -it postgres psql -U postgres
+
+# Check status container
+docker ps
+
+# View container details
+docker inspect <name> 
+
+# Copy local file to postgres server
+docker cp data_modelling/introduction/customer_reviews_1999.csv nano_de_degree_postgres:customer_reviews_1999.csv
