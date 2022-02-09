@@ -5,3 +5,4 @@ dwh.cfg
 aws.cfg
 *.pem
 .idea/
+automating_data_pipelines/airflow/logs/
