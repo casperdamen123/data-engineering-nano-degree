@@ -2,12 +2,11 @@ from pyspark.sql import SparkSession
 import pyspark.sql.functions as F
 
 if __name__ == "__main__":
-    
     spark = (SparkSession
-                .builder 
-                .appName("wrangling-data") 
-                .getOrCreate()
-    )
+             .builder
+             .appName("wrangling-data")
+             .getOrCreate()
+             )
 
     # Set cities path
     cities_path = "s3://udacity-data-nano-degree-de/cities.csv"
@@ -22,9 +21,9 @@ if __name__ == "__main__":
     # Clean and transform coordinates
     transformed_cities = cities.withColumn('coordinates', F.regexp_extract(cities['coords'], '(?<=\().+?(?=\))', 0))
     transformed_cities = (transformed_cities
-                            .withColumn('latitude', get_latitude(transformed_cities['coordinates']))
-                            .withColumn('longitude', get_longitude(transformed_cities['coordinates']))
-    )
+                          .withColumn('latitude', get_latitude(transformed_cities['coordinates']))
+                          .withColumn('longitude', get_longitude(transformed_cities['coordinates']))
+                          )
 
     # Drop old coordinates
     transformed_cities = transformed_cities.drop(*['coords', 'coordinates'])

@@ -16,7 +16,7 @@ default_args = {
     'catchup': False
 }
 
-dag = DAG('end_project_airlf',
+dag = DAG('end_project_airflow',
           default_args=default_args,
           description='Load and transform data in Redshift with Airflow',
           schedule_interval='@hourly')

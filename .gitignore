@@ -6,3 +6,4 @@ aws.cfg
 *.pem
 .idea/
 automating_data_pipelines/airflow/logs/
+capstone_project/logs/
